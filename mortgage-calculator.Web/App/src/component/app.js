@@ -1,5 +1,6 @@
 ﻿import Vue from 'vue';
 import PropertyService from '../service/property-service';
+import FormatService from '../service/format-service';
 import Decimal from "decimal.js";
 const template = require("../template/mortgage-calculator.html");
 
@@ -16,10 +17,10 @@ export default Vue.extend({
         }
     },
     methods: {
-        cloneValues(sourceProperty, destinationProperty) {
-            destinationProperty.deposit = sourceProperty.deposit;
-            destinationProperty.interestRate = sourceProperty.interestRate;
-            destinationProperty.repaymentPeriod = sourceProperty.repaymentPeriod;
+        cloneValues(index, sourceProperty) {
+            this.propertyDetails[index].deposit = FormatService.removeFormatting(sourceProperty.deposit);
+            this.propertyDetails[index].interestRate = sourceProperty.interestRate;
+            this.propertyDetails[index].repaymentPeriod = sourceProperty.repaymentPeriod;
         },
         setDefaultValues(property) {
             this.calculateDeposit(property);
@@ -42,10 +43,9 @@ export default Vue.extend({
             }, timeout);
         },
         monthlyCostUpdated(e) {
-            console.log(e);
             if (!e.triggered) {
                 for (var property of this.propertyDetails) {
-                    this.cloneValues(e.data, property);
+                    this.cloneValues(this.propertyDetails.indexOf(property), e.data);
                 }
             }
         }
