@@ -17,6 +17,16 @@ export default Vue.extend({
         }
     },
     methods: {
+        setCachedDefaultValues(data) {
+            sessionStorage.setItem("interestRate", data.interestRate);
+            sessionStorage.setItem("repaymentPeriod", data.repaymentPeriod);
+        },
+        getCachedDefaultValues() {
+            return {
+                interestRate: sessionStorage.getItem("interestRate"),
+                repaymentPeriod: sessionStorage.getItem("repaymentPeriod")
+            }
+        },
         cloneValues(index, sourceProperty) {
             this.propertyDetails[index].deposit = FormatService.removeFormatting(sourceProperty.deposit);
             this.propertyDetails[index].interestRate = sourceProperty.interestRate;
@@ -44,6 +54,8 @@ export default Vue.extend({
         },
         monthlyCostUpdated(e) {
             if (!e.triggered) {
+
+
                 for (var property of this.propertyDetails) {
                     this.cloneValues(this.propertyDetails.indexOf(property), e.data);
                 }
@@ -51,6 +63,17 @@ export default Vue.extend({
         }
     },
     mounted() {
+        
+        var cachedValues = this.getCachedDefaultValues()
+
+        if (cachedValues.interestRate !== null) {
+            this.defaultInterestRate = cachedValues.interestRate;
+        }
+
+        if (cachedValues.repaymentPeriod !== null) {
+            this.defaultRepaymentPeriod = cachedValues.repaymentPeriod;
+        }
+
         const context = this;
         this.getProperties()
             .then(function (e) {
