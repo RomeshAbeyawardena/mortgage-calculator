@@ -1,0 +1,18 @@
+html
+{
+    background: #fff;
+}
+
+form {
+    display:flex;
+    flex-direction:row;
+    div {
+        display:flex;
+        flex-direction:column;
+
+        label{
+            padding: 1rem 0.5rem;
+            text-align:center;
+        }
+    }
+}

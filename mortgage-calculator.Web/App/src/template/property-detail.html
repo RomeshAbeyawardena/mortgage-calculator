@@ -1,0 +1,36 @@
+﻿<div>
+    <h3>Monthly Mortgage Cost: &pound;{{ propertyDetails.monthlyMortgageCost | currency }}</h3>
+    <form>
+        <div>
+            <label>Property Price</label>
+            <input v-format-field 
+                   v-numeric-input 
+                   type="text" 
+                   v-model="propertyDetails.amount" />
+        </div>
+        <div>
+            <label>Deposit</label>
+            <input v-format-field
+                   v-numeric-input 
+                   type="text" 
+                   v-model="propertyDetails.deposit" />
+        </div>
+        <div>
+            <label>Interest Rate</label>
+            <input v-format-field 
+                   v-numeric-input 
+                   type="text" 
+                   v-model="propertyDetails.interestRate" />
+        </div>
+        <div>
+            <label>Repayment Period</label>
+            <input v-numeric-input 
+                   type="text" 
+                   v-model="propertyDetails.repaymentPeriod" />
+        </div>
+        <div>
+            <label>&nbsp;</label>   
+            <button type="button" v-on:click="getMonthlyMortgageCost(false)">Re-calculate</button>
+        </div>
+    </form>
+</div>

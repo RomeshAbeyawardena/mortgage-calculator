@@ -1,0 +1,11 @@
+﻿<div>
+    <div v-for="property in propertyDetails">
+        <property-detail :trigger-calculation="triggerCalculation" 
+                         :amount="property.propertyPrice | currency" 
+                         :deposit="property.deposit | currency"
+                         :interest-rate="property.interestRate | currency"
+                         :repayment-period="property.repaymentPeriod"
+                         v-on:monthly-cost-updated="monthlyCostUpdated">
+        </property-detail>
+    </div>
+</div>

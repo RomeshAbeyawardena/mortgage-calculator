@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <RootNamespace>mortgage_calculator.Shared</RootNamespace>
+  </PropertyGroup>
+
+</Project>
