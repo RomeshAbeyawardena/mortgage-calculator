@@ -31,6 +31,13 @@ namespace mortgage_calculator.Web.Controllers
             });
         }
 
+        [HttpGet, Route("/GetDefaults")]
+        public IActionResult GetDefaultValues()
+        {
+            var defaultValues = new PropertyDetailsViewModel { InterestRate = 2, RepaymentPeriod = 25 };
+            return Ok(defaultValues);
+        }
+
         [HttpGet, Route("/GetMonthlyCost")]
         public IActionResult GetMonthlyCost(PropertyDetailsViewModel model)
         {

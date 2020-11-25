@@ -1,7 +1,9 @@
 ﻿import Vue from 'vue';
 import PropertyService from '../service/property-service';
 import FormatService from '../service/format-service';
+import DefaultService from '../service/default-service';
 import Decimal from "decimal.js";
+import Promise from "promise";
 const template = require("../template/mortgage-calculator.html");
 
 export default Vue.extend({
@@ -40,6 +42,22 @@ export default Vue.extend({
         getProperties() {
             return PropertyService.getProperties();
         },
+        getDefaults() {
+            return new Promise((resolve, reject) => {
+                var defaults = sessionStorage.getItem("defaults")
+
+                if (defaults !== null) {
+                    resolve(JSON.parse(defaults));
+                    return;
+                }
+
+                DefaultService.getDefaults()
+                    .then((e) => {
+                        sessionStorage.setItem("defaults", JSON.stringify(e));
+                        resolve(e);
+                    })
+            });
+        },
         calculateDeposit(property) {
             var propertyCost = new Decimal(property.propertyPrice);
             var defaultDepositPercentage = new Decimal(this.defaultDepositPercentage);
@@ -55,7 +73,13 @@ export default Vue.extend({
         }
     },
     mounted() {
-        
+        const context = this;
+
+        this.getDefaults().then((e) => {
+            this.defaultInterestRate = e.interestRate;
+            this.defaultRepaymentPeriod = e.repaymentPeriod;
+        });
+
         var cachedValues = this.getCachedDefaultValues()
         console.log(cachedValues);
         if (cachedValues.interestRate !== null) {
@@ -66,7 +90,7 @@ export default Vue.extend({
             this.defaultRepaymentPeriod = cachedValues.repaymentPeriod;
         }
 
-        const context = this;
+
         this.getProperties()
             .then(function (e) {
                 context.propertyDetails = e;
