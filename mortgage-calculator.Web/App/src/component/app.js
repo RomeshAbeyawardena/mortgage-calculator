@@ -11,9 +11,7 @@ export default Vue.extend({
             propertyDetails: [],
             defaultDepositPercentage: 0.10,
             defaultInterestRate: 2,
-            defaultRepaymentPeriod: 25,
-            triggerCalculation: false,
-            triggerTimeout: 100
+            defaultRepaymentPeriod: 25
         }
     },
     methods: {
@@ -33,7 +31,9 @@ export default Vue.extend({
             this.propertyDetails[index].repaymentPeriod = sourceProperty.repaymentPeriod;
         },
         setDefaultValues(property) {
-            this.calculateDeposit(property);
+            if (property.deposit < 0.001) {
+                this.calculateDeposit(property);
+            }
             property.interestRate = this.defaultInterestRate;
             property.repaymentPeriod = this.defaultRepaymentPeriod;
         },
@@ -45,17 +45,9 @@ export default Vue.extend({
             var defaultDepositPercentage = new Decimal(this.defaultDepositPercentage);
             property.deposit = propertyCost.mul(defaultDepositPercentage);
         },
-        triggerMonthlyPaymentCalculation(timeout) {
-            const context = this;
-            window.setTimeout(function () {
-                context.triggerCalculation = false;
-                context.triggerCalculation = true;
-            }, timeout);
-        },
         monthlyCostUpdated(e) {
             if (!e.triggered) {
-
-
+                this.setCachedDefaultValues(e.data);
                 for (var property of this.propertyDetails) {
                     this.cloneValues(this.propertyDetails.indexOf(property), e.data);
                 }
@@ -65,7 +57,7 @@ export default Vue.extend({
     mounted() {
         
         var cachedValues = this.getCachedDefaultValues()
-
+        console.log(cachedValues);
         if (cachedValues.interestRate !== null) {
             this.defaultInterestRate = cachedValues.interestRate;
         }
@@ -81,7 +73,6 @@ export default Vue.extend({
                 for (var property of context.propertyDetails) {
                     context.setDefaultValues(property);
                 }
-                context.triggerMonthlyPaymentCalculation(context.triggerTimeout);
             });
     }
 });

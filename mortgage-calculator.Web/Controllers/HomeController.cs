@@ -10,7 +10,7 @@ namespace mortgage_calculator.Web.Controllers
 {
     public class HomeController : Controller
     {
-        [HttpGet, Route("/")]
+        [HttpGet, Route("/"), ResponseCache(Duration = 86400, VaryByHeader = "User-Agent")]
         public IActionResult Index()
         {
             return View();
@@ -20,18 +20,23 @@ namespace mortgage_calculator.Web.Controllers
         public IActionResult GetData()
         {
             return Ok(new [] { 
-                new PropertyDetailsViewModel { PropertyPrice = 115000 },
-                new PropertyDetailsViewModel { PropertyPrice = 248000 },
-                new PropertyDetailsViewModel { PropertyPrice = 339780 },
-                new PropertyDetailsViewModel { PropertyPrice = 447500 },
+                new PropertyDetailsViewModel { PropertyReference = "AA434323", PropertyPrice = 115000 },
+                new PropertyDetailsViewModel { PropertyReference = "DA645353", PropertyPrice = 248000 },
+                new PropertyDetailsViewModel { PropertyReference = "MA754723", PropertyPrice = 339780 },
+                new PropertyDetailsViewModel { PropertyReference = "FA343443", PropertyPrice = 447500 },
             });
         }
 
         [HttpGet, Route("/GetMonthlyCost")]
         public IActionResult GetMonthlyCost(PropertyDetailsViewModel model)
         {
-            var totalCost = (model.PropertyPrice ?? model.Amount - model.Deposit) / model.RepaymentPeriod / 12;
-            return Ok(totalCost);
+            var accumalatedInterest = model.PropertyPrice ?? model.Amount * (model.InterestRate / 100);
+            var totalCost = ((model.PropertyPrice ?? model.Amount + accumalatedInterest) - model.Deposit) / model.RepaymentPeriod / 12;
+
+            return Ok(new { 
+                TotalCost = totalCost, 
+                AccumalatedInterest = accumalatedInterest / model.RepaymentPeriod
+            });
         }
     }
 }

@@ -1,19 +1,22 @@
 ﻿import Vue from 'vue';
-import propertyService from '../service/property-service';
+import PropertyService from '../service/property-service';
+import FormatService from "../service/format-service";
 const template = require("../template/property-detail.html");
+import Decimal from "decimal.js";
+import Promise from "promise";
 
 export default Vue.component("property-detail", {
     template: template,
-    props: ["amount", "deposit", "interestRate", "repaymentPeriod", "triggerCalculation"],
+    props: ["amount", "deposit", "interestRate", "repaymentPeriod"],
     data: function () {
         return {
             trig: this.triggerCalculation,
             propertyDetails: {
-                monthlyMortgageCost: 0,
                 amount: this.amount,
                 deposit: this.deposit,
                 interestRate: this.interestRate,
-                repaymentPeriod: this.repaymentPeriod
+                repaymentPeriod: this.repaymentPeriod,
+                accumalatedInterest: 0
             }
         }
     },
@@ -29,21 +32,33 @@ export default Vue.component("property-detail", {
         },
         repaymentPeriod(newValue) {
             this.propertyDetails.repaymentPeriod = newValue;
-        },
-        triggerCalculation: function (newValue) {
-            if (newValue === true) {
-                this.getMonthlyMortgageCost(true);
-            }
+        }
+    },
+    asyncComputed: {
+        async monthlyMortgageCost() {
+            return await this.getMonthlyMortgageCost();
+        }
+    },
+    computed: {
+        totalPayable() {
+            return new Decimal(FormatService.removeFormatting(this.propertyDetails.amount))
+                .add(new Decimal(FormatService.removeFormatting(this.propertyDetails.accumalatedInterest)));
         }
     },
     methods: {
-        getMonthlyMortgageCost(triggered) {
-            const context = this;
-            propertyService.getMonthlyMortgageCost(this.propertyDetails)
-                .then(function (e) {
-                    context.propertyDetails.monthlyMortgageCost = e;
-                    context.$emit("monthly-cost-updated", { amount: e, triggered: triggered, data: context.propertyDetails })
+        recalculate() {
+            this.getMonthlyMortgageCost();
+            this.$emit("monthly-cost-updated", { data: this.propertyDetails });
+        },
+        getMonthlyMortgageCost() {
+            var context = this;
+            return new Promise((resolve, reject) => {
+                PropertyService.getMonthlyMortgageCost(this.propertyDetails)
+                    .then(function (e) {
+                        resolve(e.totalCost);
+                        context.propertyDetails.accumalatedInterest = e.accumalatedInterest;
+                    });
             });
         }
     }
-});
+}); 

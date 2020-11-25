@@ -11,6 +11,11 @@ const config = {
     module: {
         rules: [
             {
+                test: /\.js$/,
+                use: 'babel-loader',
+                exclude: /node_modules/
+            },
+            {
                 test: /\.html$/,
                 use: [
                     'html-loader'
@@ -30,9 +35,9 @@ const config = {
         extensions: [
             '.js'
         ],
-         alias: {
+        alias: {
             'vue$': 'vue/dist/vue.esm.js' // 'vue/dist/vue.common.js' for webpack 1
-         }
+        }
     },
     plugins: [
         new MiniCssExtractPlugin(),

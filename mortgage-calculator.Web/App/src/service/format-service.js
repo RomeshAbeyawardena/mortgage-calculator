@@ -5,6 +5,15 @@ const formatService = {
         return Accounting.formatNumber(value, decimalPlaces);
     },
     removeFormatting: function (value) {
+        
+        if (!isNaN(value)) {
+            return value;
+        }
+
+        if (!value || value === null) {
+            return 0;
+        }
+
         return value.replace(new RegExp(",", "g"), "");
     }
 }

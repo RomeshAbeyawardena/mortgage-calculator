@@ -1,5 +1,12 @@
+@import url(https://fonts.googleapis.com/css2?family=Lato:wght@300;400&display=swap);
 html {
-  background: #fff; }
+  background: #fff;
+  color: #000; }
+
+body,
+input,
+button {
+  font-family: 'Lato', sans-serif; }
 
 form {
   display: flex;

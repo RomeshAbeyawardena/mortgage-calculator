@@ -1,5 +1,7 @@
 ﻿<div>
-    <h3>Monthly Mortgage Cost: &pound;{{ propertyDetails.monthlyMortgageCost | currency }}</h3>
+    <h3>Monthly Mortgage Cost: &pound;{{ monthlyMortgageCost | currency }}</h3>
+    <p>*Total payable (after {{ propertyDetails.repaymentPeriod }} years): &pound;{{totalPayable | currency }} </p>
+    <p>Accumalated annual interest: &pound;{{propertyDetails.accumalatedInterest | currency }}</p>
     <form>
         <div>
             <label>Property Price</label>
@@ -30,7 +32,7 @@
         </div>
         <div>
             <label>&nbsp;</label>   
-            <button type="button" v-on:click="getMonthlyMortgageCost(false)">Re-calculate</button>
+            <button type="button" v-on:click="recalculate">Re-calculate</button>
         </div>
     </form>
 </div>

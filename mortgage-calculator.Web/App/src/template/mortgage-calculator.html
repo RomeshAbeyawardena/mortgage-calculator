@@ -1,6 +1,6 @@
 ﻿<div>
     <div v-for="property in propertyDetails">
-        <property-detail :trigger-calculation="triggerCalculation" 
+        <property-detail ref="property.uniqueId"
                          :amount="property.propertyPrice | currency" 
                          :deposit="property.deposit | currency"
                          :interest-rate="property.interestRate | currency"
@@ -8,4 +8,5 @@
                          v-on:monthly-cost-updated="monthlyCostUpdated">
         </property-detail>
     </div>
+    <p>* Total amount payable is only an estimate and excludes any additional arrangement fees and charges that may be contractually included in a typical mortgage</p>
 </div>

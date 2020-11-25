@@ -17,6 +17,7 @@ namespace mortgage_calculator.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services
+                .AddResponseCaching()
                 .AddControllersWithViews();
         }
 
@@ -29,6 +30,7 @@ namespace mortgage_calculator.Web
             }
 
             app
+                .UseResponseCaching()
                 .UseStaticFiles()
                 .UseRouting();
 
