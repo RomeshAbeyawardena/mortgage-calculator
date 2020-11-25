@@ -1,6 +1,7 @@
 ﻿<div>
     <div v-for="property in propertyDetails">
         <property-detail ref="property.uniqueId"
+                         :property-reference="property.propertyReference"
                          :amount="property.propertyPrice | currency" 
                          :deposit="property.deposit | currency"
                          :interest-rate="property.interestRate | currency"

@@ -7,11 +7,11 @@ import Promise from "promise";
 
 export default Vue.component("property-detail", {
     template: template,
-    props: ["amount", "deposit", "interestRate", "repaymentPeriod"],
+    props: ["amount", "deposit", "interestRate", "repaymentPeriod", "propertyReference"],
     data: function () {
         return {
-            trig: this.triggerCalculation,
             propertyDetails: {
+                reference: this.propertyReference,
                 amount: this.amount,
                 deposit: this.deposit,
                 interestRate: this.interestRate,
@@ -42,7 +42,8 @@ export default Vue.component("property-detail", {
     computed: {
         totalPayable() {
             return new Decimal(FormatService.removeFormatting(this.propertyDetails.amount))
-                .add(new Decimal(FormatService.removeFormatting(this.propertyDetails.accumalatedInterest)));
+                .add(new Decimal(FormatService.removeFormatting(this.propertyDetails.accumalatedInterest))
+                    .mul(this.propertyDetails.repaymentPeriod));
         }
     },
     methods: {

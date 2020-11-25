@@ -24,6 +24,10 @@ namespace mortgage_calculator.Web.Controllers
                 new PropertyDetailsViewModel { PropertyReference = "DA645353", PropertyPrice = 248000 },
                 new PropertyDetailsViewModel { PropertyReference = "MA754723", PropertyPrice = 339780 },
                 new PropertyDetailsViewModel { PropertyReference = "FA343443", PropertyPrice = 447500 },
+                new PropertyDetailsViewModel { PropertyReference = "FH545377", PropertyPrice = 330000 },
+                new PropertyDetailsViewModel { PropertyReference = "TF534391", PropertyPrice = 789763 },
+                new PropertyDetailsViewModel { PropertyReference = "LP747644", PropertyPrice = 699843 },
+                new PropertyDetailsViewModel { PropertyReference = "ZX455009", PropertyPrice = 764220 },
             });
         }
 
